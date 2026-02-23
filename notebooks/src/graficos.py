@@ -8,7 +8,7 @@ from .models import RANDOM_STATE
 
 sns.set_theme(palette="bright")
 
-PALETTE = "coolwarm"
+PALETTE = "RdYlBu_r"
 SCATTER_ALPHA = 0.2
 
 
