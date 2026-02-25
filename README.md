@@ -56,3 +56,4 @@ Durante o desenvolvimento, variáveis brutas foram transformadas em métricas ma
 ├── relatorios         <- Análises geradas em HTML, PDF, LaTeX, etc.
 │   └── imagens        <- Gráficos e figuras gerados para serem usados em relatórios
 ```
+Desenvolvido por [Gabriel Duarte /https://www.linkedin.com/in/djgabriel93/]
