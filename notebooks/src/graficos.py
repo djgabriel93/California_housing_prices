@@ -73,8 +73,8 @@ def plot_residuos_estimador(estimator, X, y, eng_formatter=False, fracao_amostra
 
     if eng_formatter:
         for ax in axs:
-            ax.yaxis.set_major_formatter(EngFormatter())
-            ax.xaxis.set_major_formatter(EngFormatter())
+            ax.yaxis.set_major_formatter(EngFormatter(places=0, sep=""))
+            ax.xaxis.set_major_formatter(EngFormatter(places=0, sep=""))
 
     plt.tight_layout()
 
