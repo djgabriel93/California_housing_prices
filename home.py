@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import geopandas as gpd
+import math
+
 
 from joblib import load
 
@@ -24,27 +26,62 @@ gdf_geo = carregar_dados_geo()
 modelo = carregar_modelo()
 
 
-st.title("Pevisão de preços dos imóveis da Califórnia 🏡")
+st.title("🏡 Previsão de Preços de Imóveis na Califórnia")
 
-st.write("Localizaçao")
-longitude = st.number_input("Longitude", value = -122.33)
-latitude = st.number_input("latitude", value = 37.88)
-ocean_proximity = st.radio("Proximidade Oceano", df['ocean_proximity'].unique())
+st.markdown("""
+#### Este simulador faz parte do Projeto de previsão de preços de imóveis utilizando modelo de Machine Learning.
 
-st.write("Renda")#
-median_income = st.slider("Renda média (múltiplos de US$ 10mil)", 0.50, 15.0, 4.5, 0.5)
-median_income_cat = st.slider("Renda média (categoria)", 1,5)
+Desenvolvido por [Gabriel Duarte](https://www.linkedin.com/in/djgabriel93)
 
-st.write("Características do imóvel")#
-bedrooms_per_room = st.number_input("Quartos por cômodo", value = 0.146591)
-households = st.number_input("Domicílios", value = 126)
-housing_median_age = st.number_input("Idade do imóvel", value = 41)
-population_per_household = st.number_input("Pessoas por domicílio", value = 2.555556)
-population = st.number_input("População", value = 322)
-population_per_room = st.number_input("Pessoas por cômodo", value = 0.365909)
-rooms_per_household = st.number_input("Pessoas por domicílios", value = 6.984127)
-total_bedrooms = st.number_input("Total de quartos", value = 129)
-total_rooms = st.number_input("Total de cômodos", value = 880)
+""")
+
+
+#Variáveis de Localização
+
+condados = list(gdf_geo["name"].sort_values()) #lista de condados
+selecionar_condados = condados = st.selectbox(label = "Região (condado)", options = condados, index = 18) #seleção do condado
+
+#cálculo de latitude e longitude
+longitude = gdf_geo.query("name == @selecionar_condados")["longitude"].values
+latitude = gdf_geo.query("name == @selecionar_condados")["latitude"].values
+
+#pega a categoria no dataframe baseado no condado selecionado
+ocean_proximity = gdf_geo.query("name == @selecionar_condados")["ocean_proximity"].values
+
+#cálculo de renda média baseado no condado
+median_income = gdf_geo.query("name == @selecionar_condados")["median_income"].values
+median_income_cat = gdf_geo.query("name == @selecionar_condados")["median_income_cat"].values
+
+
+#Variáveis do imóvel
+
+#population, households é a média do condado
+population_per_household = gdf_geo.query("name == @selecionar_condados")["population_per_household"].values
+population = gdf_geo.query("name == @selecionar_condados")["population"].values
+households = gdf_geo.query("name == @selecionar_condados")["households"].values
+
+#usuário seleciona quantidade de quartos e comodos
+
+rooms_per_household = st.select_slider("nº de cômodos", [2,3,4,5,6,7,8,9, 10])
+
+if rooms_per_household == 2:
+    maximo = 3
+else:
+    maximo = 1 + math.ceil(rooms_per_household/2)
+    
+bedrooms_per_household = st.select_slider("nº de quartos", list(np.arange(1, maximo)))
+
+#Cálculos
+total_bedrooms = bedrooms_per_household * households
+total_rooms = rooms_per_household * households
+bedrooms_per_room = total_bedrooms / total_rooms 
+population_per_room = population / total_rooms
+
+
+#usuário seleciona a idade do imóvel
+housing_median_age = st.number_input("Idade do imóvel (em anos)", value = 41, min_value=1, max_value = 50) 
+
+
 
 
 entrada_modelo = {
