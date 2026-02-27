@@ -47,8 +47,29 @@ total_bedrooms = st.number_input("Total de quartos", value = 129)
 total_rooms = st.number_input("Total de cômodos", value = 880)
 
 
-entrada
+entrada_modelo = {
+    'longitude':longitude,
+    'latitude':latitude,
+    'ocean_proximity':ocean_proximity,
+    'median_income':median_income,
+    'median_income_cat':median_income_cat,
+    'bedrooms_per_room':bedrooms_per_room,
+    'households':households,
+    'housing_median_age':housing_median_age,
+    'population_per_household':population_per_household,
+    'population':population,
+    'population_per_room':population_per_room,
+    'rooms_per_household':rooms_per_household,
+    'total_bedrooms':total_bedrooms,
+    'total_rooms':total_rooms,
+    
+}
 
+df_entrada_modelo = pd.DataFrame(entrada_modelo, index =[0])
 
-if st.button("Previsão"):
-    st.balloons()
+previsao_modelo = modelo.predict(df_entrada_modelo)
+
+botao_previsao = st.button("Prever o preço")
+
+if botao_previsao:
+    st.write(f"Preco da casa é de US$ {previsao_modelo[0][0]:,.2f}")
