@@ -178,3 +178,7 @@ cython_debug/
 
 #Linkedin
 /linkedin/
+
+#Streamlit
+anaconda_projects/
+*.excalidraw
