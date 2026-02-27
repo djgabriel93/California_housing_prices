@@ -39,26 +39,28 @@ Desenvolvido por [Gabriel Duarte](https://www.linkedin.com/in/djgabriel93)
 #Variáveis de Localização
 
 condados = list(gdf_geo["name"].sort_values()) #lista de condados
-selecionar_condados = condados = st.selectbox(label = "Região (condado)", options = condados, index = 18) #seleção do condado
+selecionar_condados = st.selectbox(label = "Região (condado)", options = condados, index = 18) #seleção do condado
+
+df_condado = gdf_geo.query("name == @selecionar_condados")
 
 #cálculo de latitude e longitude
-longitude = gdf_geo.query("name == @selecionar_condados")["longitude"].values
-latitude = gdf_geo.query("name == @selecionar_condados")["latitude"].values
+longitude = df_condado["longitude"].values[0]
+latitude = df_condado["latitude"].values[0]
 
 #pega a categoria no dataframe baseado no condado selecionado
-ocean_proximity = gdf_geo.query("name == @selecionar_condados")["ocean_proximity"].values
+ocean_proximity = df_condado["ocean_proximity"].values[0]
 
 #cálculo de renda média baseado no condado
-median_income = gdf_geo.query("name == @selecionar_condados")["median_income"].values
-median_income_cat = gdf_geo.query("name == @selecionar_condados")["median_income_cat"].values
+median_income = df_condado["median_income"].values[0]
+median_income_cat = df_condado["median_income_cat"].values[0]
 
 
 #Variáveis do imóvel
 
 #population, households é a média do condado
-population_per_household = gdf_geo.query("name == @selecionar_condados")["population_per_household"].values
-population = gdf_geo.query("name == @selecionar_condados")["population"].values
-households = gdf_geo.query("name == @selecionar_condados")["households"].values
+population_per_household = df_condado["population_per_household"].values[0]
+population = df_condado["population"].values[0]
+households = df_condado["households"].values[0]
 
 #usuário seleciona quantidade de quartos e comodos
 
@@ -74,7 +76,7 @@ bedrooms_per_household = st.select_slider("nº de quartos", list(np.arange(1, ma
 #Cálculos
 total_bedrooms = bedrooms_per_household * households
 total_rooms = rooms_per_household * households
-bedrooms_per_room = total_bedrooms / total_rooms 
+bedrooms_per_room = bedrooms_per_household / rooms_per_household 
 population_per_room = population / total_rooms
 
 
@@ -102,11 +104,10 @@ entrada_modelo = {
     
 }
 
-df_entrada_modelo = pd.DataFrame(entrada_modelo, index =[0])
-
-previsao_modelo = modelo.predict(df_entrada_modelo)
 
 botao_previsao = st.button("Prever o preço")
 
 if botao_previsao:
+    df_entrada_modelo = pd.DataFrame(entrada_modelo, index =[0])
+    previsao_modelo = modelo.predict(df_entrada_modelo)
     st.write(f"Preco da casa é de US$ {previsao_modelo[0][0]:,.2f}")
