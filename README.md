@@ -66,16 +66,28 @@ Caso queira clonar o repositório e testar as análises ou o simulador na sua m�
 
 1. Clone o repositório:
 ```bash
-git clone [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git)
+git clone https://github.com/djgabriel93/California_housing_prices.git
+cd California_housing_prices
 ```
 
 2. Crie e ative o ambiente virtual via Conda:
 ```bash
-conda env create -f environment.yml
-conda activate California_houses
+# Criar o ambiente
+python -m venv venv
+
+# Ativar no Windows:
+venv\Scripts\activate
+
+# Ativar no Linux/Mac:
+source venv/bin/activate
 ```
 
-3. Para rodar a aplicação web localmente:
+3. Instale as dependências:
+```bash
+pip install -r requirements.txt
+``` 
+
+4. Para rodar a aplicação web localmente:
 ```bash
 streamlit run home.py
 ```
@@ -85,7 +97,7 @@ streamlit run home.py
 
 ```
 ├── .gitignore         <- Arquivos e diretórios a serem ignorados pelo Git
-├── environment.yml    <- O arquivo de requisitos para reproduzir o ambiente de análise
+├── requirements.yml    <- O arquivo de requisitos para reproduzir o ambiente de análise
 ├── LICENSE            <- Licença de código aberto se uma for escolhida
 ├── README.md          <- README principal para desenvolvedores que usam este projeto.
 |
