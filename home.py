@@ -104,9 +104,13 @@ def controles_do_imovel():
         
         df_entrada_modelo = pd.DataFrame(entrada_modelo, index=[0])
         previsao_modelo = modelo.predict(df_entrada_modelo)
+
+        fator_inflacao_2026 = 2.49
+        preco_atualizado = previsao_modelo.item() * fator_inflacao_2026
         
-        # Usando st.success para deixar a mensagem verde e atrativa
-        st.success(f"O preço estimado da casa é de: **US$ {previsao_modelo.item():,.2f}**")
+        # Mostrando o resultado original e o atualizado lado a lado!
+        st.success(f"Valor histórico da casa (1990): **US$ {previsao_modelo.item():,.2f}**")
+        st.info(f"📈 Valor atualizado pela inflação (2026): **US$ {preco_atualizado:,.2f}**")
 
 # Chamamos a função do fragmento para renderizar na Coluna 1
 with coluna1:
