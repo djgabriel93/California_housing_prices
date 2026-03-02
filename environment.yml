@@ -7,10 +7,22 @@ dependencies:
   - pandas
   - numpy
   - scikit-learn
+  - matplotlib
+  - seaborn
   - geopandas
+  - folium
+  - mapclassify
+  - statsmodels
   - joblib
+  - pillow
+  - pyyaml
+  - requests
   - pip
   - pip:
       - streamlit
       - pydeck
       - pyarrow
+      - altair
+      - watchdog
+      - contextily
+      - xyzservices
